@@ -1,4 +1,4 @@
-        #include<stdio.h>
+#include<stdio.h>
 #include<stdlib.h>
 #include<unistd.h>
 #include<errno.h>
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
  cin>>op2;
  cout<<"the operands entered are "<<op1<<" & "<<op2<<endl;
 
- buf1 = "ASOR " + op + " " + op1 + " " + op2; 
+ buf1 = "AOSR " + op + " " + op1 + " " + op2; 
 //send the operation to server
  if (send(sockfd, buf1.c_str(), 32, 0) == -1)
  perror("client: send");
@@ -111,9 +111,7 @@ int main(int argc, char *argv[])
  {
   perror("recv"); exit(0);
  }
- cout<<"Port change request received : "<<buf2<<endl;
- 
-  
+ cout<<"received : "<<buf2<<endl;
  
  string recc=buf2;
  string temp;
@@ -140,10 +138,11 @@ int main(int argc, char *argv[])
 
 if (temp=="ACR")
  {
-  cout<<buf2<<endl;
+  cout<<"result received: "<<buf2<<endl;
  }
- else
- cout<<"Client is changing the port number to ";
+else
+
+cout<<"Client is changing the port number to ";
  
  
 

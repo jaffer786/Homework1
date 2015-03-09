@@ -129,7 +129,7 @@ int main(void)
    if (!fork()) 
    { // this is the child process
      //close(sockfd); // child doesn't need the listener
-     if (send(new_fd, "Hello, message format: ASOR operation operand1 operand2", 55, 0) == -1)
+     if (send(new_fd, "Hello, message format: AOSR operation operand1 operand2", 55, 0) == -1)
      perror("send");
 
      char buf[32];
@@ -154,7 +154,7 @@ int main(void)
      cout<<temp<<endl;
 
      //error message
-     if (temp!="ASOR")
+     if (temp!="AOSR")
      {
       if (send(new_fd, "ERROR UNRECOGMESSADE", 20, 0) == -1)
       perror("send");
