@@ -113,6 +113,7 @@ int main(void)
   }
 
   printf("server: waiting for connections...\n");
+  cout<<endl;
   while(1)
   { // main accept() loop
    sin_size = sizeof their_addr;
@@ -126,11 +127,13 @@ int main(void)
    get_in_addr((struct sockaddr *)&their_addr),s, sizeof s);
 
    printf("server: got connection from %s\n", s);
+   cout<<endl<<endl;
    if (!fork()) 
    { // this is the child process
      //close(sockfd); // child doesn't need the listener
-     if (send(new_fd, "Hello, message format: AOSR operation operand1 operand2", 55, 0) == -1)
-     perror("send");
+    
+     /*if (send(new_fd, "Hello, message format: AOSR operation operand1 operand2", 55, 0) == -1)
+     perror("send");*/
 
      char buf[32];
      if ((numbytes = recv(new_fd, buf, 32, 0)) == -1) 
@@ -139,7 +142,7 @@ int main(void)
      }
 
      //buf[numbytes] = '\0';
-     cout<<"Server received: "<<buf<<endl; 
+     cout<<"Server received: "<<buf<<endl<<endl; 
 
      string temp,op,op1,op2;
      int i=0;
@@ -151,7 +154,7 @@ int main(void)
       temp=temp+recvd[i];
       i++;
      }
-     cout<<temp<<endl;
+     //cout<<temp<<endl;
 
      //error message
      if (temp!="AOSR")
@@ -169,7 +172,7 @@ int main(void)
       op=op+recvd[i];
       i++ ;
      }
-     cout<<op<<endl;
+     //cout<<op<<endl;
      //error message
      if (op!="+")
       { if(op!="-")
@@ -189,12 +192,12 @@ int main(void)
        op1=op1+recvd[i];
        i++;
      }
-     cout<<op1<<endl;
+     //cout<<op1<<endl;
 
     i=i+1;
 
     op2=op2+recvd[i];
-    cout<<op2<<endl;
+    //cout<<op2<<endl;
 
     //convert string to integer and compute result
     int OP1;
@@ -205,19 +208,19 @@ int main(void)
 
     if(op=="+")
     {result=OP1+OP2;
-    cout<<result<<endl;
+    cout<<"result = "<<result<<endl;
     }
     else if(op=="-")
     {
     result=OP1-OP2; 
-    cout<<result<<endl;}
+    cout<<"result = "<<result<<endl;}
     else if(op=="*")
     {result=OP1*OP2;
-    cout<<result<<endl;}
+    cout<<"result = "<<result<<endl;}
     else if(op=="/")
     {
      result=OP1/OP2;
-     cout<<result<<endl;
+     cout<<"result = "<<result<<endl;
     }
 
     // convert result to string
@@ -234,7 +237,7 @@ int main(void)
     if(portreq=="n")
     {
       //send the result to client
-      string buf1="ACR " + Result;
+      string buf1="ACR " + Result + "\r";
       if (send(new_fd, buf1.c_str(), 10, 0) == -1)
        perror("send");
        cout<<"result sent successfully"<<endl;
@@ -243,7 +246,7 @@ int main(void)
     else 
     cout<<"enter the port number you want to switch to :";
     cin>>port_number_str;
-    string newport="CPN " + port_number_str + " ";
+    string newport="CPN " + port_number_str + "\r";
     if (send(new_fd,newport.c_str(), 10, 0) == -1)
     perror("send");
     cout<<"port change request sent:"<<newport<<endl;

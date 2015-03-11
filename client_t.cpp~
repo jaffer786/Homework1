@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
  int rv;
  char s[INET6_ADDRSTRLEN];
  string buf1; 
+ string buf3;
 
  if (argc != 2)
  {
@@ -80,30 +81,35 @@ int main(int argc, char *argv[])
  inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),s, sizeof s);
  printf("client: connecting to %s\n", s);
  freeaddrinfo(servinfo); // all done with this structure
- if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1)
+
+
+ /*if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1)
  {
   perror("recv");
   exit(1);
  }
  buf[numbytes] = '\0';
- printf("client: received '%s'\n",buf);
+ printf("client: received '%s'\n",buf);*/
 
  string op1, op2;
  string op;
  printf("Please enter the operation you want to perform (ex: +,-,/,*) : ");
  cin>>op;
+ cout<<endl;
  printf("Enter the value or operand-1 : ");
  cin>>op1;
+ cout<<endl;
  printf("Enter the value of operand-2 : ");
  cin>>op2;
+ cout<<endl;
  cout<<"the operands entered are "<<op1<<" & "<<op2<<endl;
-
- buf1 = "ASOR " + op + " " + op1 + " " + op2; 
-//send the operation to server
+ cout<<endl;
+ buf1 = "AOSR " + op + " " + op1 + " " + op2 + "\r"; 
+ //send the operation to server
  if (send(sockfd, buf1.c_str(), 32, 0) == -1)
  perror("client: send");
  cout<<"client: sent "<<buf1<<endl;
-
+ cout<<endl;
  //receive result and displayed
 
  char buf2[32];
@@ -111,9 +117,42 @@ int main(int argc, char *argv[])
  {
   perror("recv"); exit(0);
  }
- cout<<"received : "<<buf2<<endl;
+ //cout<<"received : "<<buf2<<endl;
  
- string recc=buf2;
+ string temp;
+ string prt;
+ int i=0;
+ 
+ while(buf2[i]!=' ')
+ {
+  temp=temp+buf2[i];
+  i++;
+ }
+ //cout<<temp<<endl;
+ i=i+1;
+ 
+ while(buf2[i]!='\r')
+ {
+  prt=prt+buf2[i];
+  i++;
+ }
+  
+ if (temp=="ACR")
+ {
+  cout<<"Result= "<<prt<<endl;
+ }
+ 
+ else if(temp=="CPN") 
+ {
+ cout<<"Client is changing the port number to "<<prt<<endl;
+ }
+ 
+ buf3 = "CPN_ACK " + "1" + "\r";
+ if (send(sockfd, buf3.c_str(), 32, 0) == -1)
+ perror("client: send");
+ 
+ 
+ /*string recc=buf2;
  string temp;
  string prt;
  int i=0;
@@ -184,7 +223,7 @@ cout<<"Client is changing the port number to ";
  string buf3="CPN_ACK 1";
  if (send(sockfd, buf3.c_str(), 32, 0) == -1)
  perror("client: send");
- cout<<"client: sent "<<buf3<<endl; 
+ cout<<"client: sent "<<buf3<<endl;*/ 
 
 
 
